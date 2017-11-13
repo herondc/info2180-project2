@@ -1,99 +1,105 @@
+// note to self remember to  check over code//
+// note to self ask for assistance from class mates, no need to suffer alone//
+// note to self remember to add extra features - if it doesnt work leave it alone and focus on code - timer//
+// I will have to to set a function that can determine when the puzzle is solved//
+// note to self remember to know exactly how each line function//
 window.onload = function(){
     var puzzle = document.getElementById("puzzlearea");
     var pieces = puzzle.children;
-    var positionTop = 0;
-    var positionLeft = 0;
-    var backgroundLeft = 0;
-    var backgroundTop = 0;
+    var toppos = 0;
+    var leftpos = 0;
+    var leftbg = 0;
+    var topbg = 0;
     var emptyTop = 300;
     var emptyLeft = 300;
-    var oldTop;
-    var oldLeft;
+    var prevtop;
+    var prevleft;
     var shufflePiece;
     var shuffles = [];
     var shuffleTimes = 1000;
+    // var starttime = 0;
     
     for(var i=0; i < pieces.length; i++){
         pieces[i].className = "puzzlepiece";
-        pieces[i].style.top =  positionTop + "px";
-        pieces[i].style.left = positionLeft + "px";
-        pieces[i].style.backgroundPosition = backgroundLeft + "px " + backgroundTop + "px";
+        pieces[i].style.top =  toppos + "px";
+        pieces[i].style.left = leftpos + "px";
+        pieces[i].style.backgroundPosition = leftbg + "px " + topbg + "px";
         pieces[i].onclick= move;
         pieces[i].onmouseover= movable;
 
-        if(positionLeft < 300){
-            positionLeft = positionLeft + 100;
-            backgroundLeft = backgroundLeft - 100;
+        if(leftpos < 300){
+            leftpos = leftpos + 100;
+            leftbg = leftbg - 100;
         }
         else{
-            positionLeft = 0;
-            backgroundLeft = 0;
-            positionTop = positionTop + 100;
-            backgroundTop = backgroundTop - 100;
+            leftpos = 0;
+            leftbg = 0;
+            toppos = toppos + 100;
+            topbg = topbg - 100;
         }   
     }
-
+//function responsible for moving puzzle pieces into blank spaces
     function move(){
-        oldTop = parseInt(this.style.top);
-        oldLeft = parseInt(this.style.left);
-        if (oldTop == emptyTop && oldLeft == (emptyLeft-100) || oldTop == emptyTop && oldLeft == (emptyLeft+100) || oldTop == (emptyTop-100) && oldLeft == emptyLeft || oldTop == (emptyTop+100) && oldLeft == emptyLeft){
+        prevtop= parseInt(this.style.top);
+        prevleft = parseInt(this.style.left);
+        if (prevtop== emptyTop && prevleft == (emptyLeft-100) || prevtop== emptyTop && prevleft == (emptyLeft+100) || prevtop== (emptyTop-100) && prevleft == emptyLeft || prevtop== (emptyTop+100) && prevleft == emptyLeft){
             this.style.top = emptyTop + "px";
             this.style.left = emptyLeft + "px";
-            emptyTop = oldTop;
-            emptyLeft = oldLeft;
+            emptyTop = prevtop;
+            emptyLeft = prevleft;
         }
     }
-
+//function responsible for identifying pieces that can be moved
     function movable(){
-        oldTop = parseInt(this.style.top);
-        oldLeft = parseInt(this.style.left);
-        if (oldTop == emptyTop && oldLeft == (emptyLeft-100) || oldTop == emptyTop && oldLeft == (emptyLeft+100) || oldTop == (emptyTop-100) && oldLeft == emptyLeft || oldTop == (emptyTop+100) && oldLeft == emptyLeft){
+        prevtop= parseInt(this.style.top);
+        prevleft = parseInt(this.style.left);
+        if (prevtop== emptyTop && prevleft == (emptyLeft-100) || prevtop== emptyTop && prevleft == (emptyLeft+100) || prevtop== (emptyTop-100) && prevleft == emptyLeft || prevtop== (emptyTop+100) && prevleft == emptyLeft){
             $(this).addClass('movablepiece');   
         }
         else{
             $(this).removeClass("movablepiece");
         }
     }
-
+//function responsible for shuffling the puzzle
     function Shuffle(){
         for(var c = 0; c < shuffleTimes; c++){
             var choice = Math.floor (Math.random () * 4);
             console.log(choice);
             if ( choice == 0) {
                 (getStyle((emptyTop-100)+"px", emptyLeft+"px"))|| getStyle((emptyTop+100)+"px", emptyLeft+"px");
-                oldTop = parseInt(shufflePiece.style.top);
-                oldLeft = parseInt(shufflePiece.style.left);
+                prevtop= parseInt(shufflePiece.style.top);
+                prevleft = parseInt(shufflePiece.style.left);
                 shufflePiece.style.top = emptyTop + "px";
                 shufflePiece.style.left = emptyLeft + "px";
-                emptyTop = oldTop;
-                emptyLeft = oldLeft;
+                emptyTop = prevtop;
+                emptyLeft = prevleft;
             }
             else if ( choice == 1) {
                 (getStyle(emptyTop+"px", (emptyLeft-100)+"px")) || getStyle(emptyTop+"px", (emptyLeft + 100)+"px");
-                oldTop = parseInt(shufflePiece.style.top);
-                oldLeft = parseInt(shufflePiece.style.left);
+                prevtop= parseInt(shufflePiece.style.top);
+                prevleft = parseInt(shufflePiece.style.left);
                 shufflePiece.style.top = emptyTop + "px";
                 shufflePiece.style.left = emptyLeft + "px";
-                emptyTop = oldTop;
-                emptyLeft = oldLeft;
+                emptyTop = prevtop;
+                emptyLeft = prevleft;
             }
             else if ( choice == 2) {
                 getStyle((emptyTop+100)+"px", emptyLeft+"px") || (getStyle((emptyTop-100)+"px", emptyLeft+"px"));
-                oldTop = parseInt(shufflePiece.style.top);
-                oldLeft = parseInt(shufflePiece.style.left);
+                prevtop= parseInt(shufflePiece.style.top);
+                prevleft = parseInt(shufflePiece.style.left);
                 shufflePiece.style.top = emptyTop + "px";
                 shufflePiece.style.left = emptyLeft + "px";
-                emptyTop = oldTop;
-                emptyLeft = oldLeft;
+                emptyTop = prevtop;
+                emptyLeft = prevleft;
             }
             else {
                 getStyle(emptyTop+"px", (emptyLeft + 100)+"px") || (getStyle(emptyTop+"px", (emptyLeft-100)+"px"));
-                oldTop = parseInt(shufflePiece.style.top);
-                oldLeft = parseInt(shufflePiece.style.left);
+                prevtop= parseInt(shufflePiece.style.top);
+                prevleft = parseInt(shufflePiece.style.left);
                 shufflePiece.style.top = emptyTop + "px";
                 shufflePiece.style.left = emptyLeft + "px";
-                emptyTop = oldTop;
-                emptyLeft = oldLeft;
+                emptyTop = prevtop;
+                emptyLeft = prevleft;
             }
         }   
     }
@@ -106,4 +112,9 @@ window.onload = function(){
         }
     }
     document.getElementById("controls").onclick = Shuffle; 
+    //   function puzzlesolved () {
+
+
+  // if 
+  //   }
 }
